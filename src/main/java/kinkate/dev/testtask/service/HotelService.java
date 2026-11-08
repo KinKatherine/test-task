@@ -2,7 +2,6 @@ package kinkate.dev.testtask.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import kinkate.dev.testtask.dto.AddressDto;
 import kinkate.dev.testtask.dto.ArrivalTimeDto;
 import kinkate.dev.testtask.dto.ContactDto;
@@ -18,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -143,5 +144,28 @@ public class HotelService {
         hotel.getAmenities().addAll(amenities);
         hotelRepository.save(hotel);
         log.info("Удобства успешно добавлены к отелю с id {}", id);
+    }
+
+    public Map<String, Long> getHistogram(String param) {
+        log.info("Запрос на получение гистограммы по параметру: {}", param);
+        List<Object[]> results;
+
+        switch (param.toLowerCase()) {
+            case "brand" -> results = hotelRepository.countByBrand();
+            case "city" -> results = hotelRepository.countByCity();
+            case "country" -> results = hotelRepository.countByCountry();
+            case "amenities" -> results = hotelRepository.countByAmenities();
+            default -> throw new IllegalArgumentException("Недопустимый параметр для гистограммы: " + param);
+        }
+
+        Map<String, Long> histogram = new HashMap<>();
+        for (Object[] row : results) {
+            if (row[0] != null) {
+                histogram.put(String.valueOf(row[0]), ((Number) row[1]).longValue());
+            }
+        }
+
+        log.info("Гистограмма по параметру {} успешно получена: {}", param, histogram);
+        return histogram;
     }
 }

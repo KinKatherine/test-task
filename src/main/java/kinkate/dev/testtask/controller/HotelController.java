@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -56,7 +57,7 @@ public class HotelController {
         log.info("POST /hotels");
         HotelShortDto hotelShortDto = hotelService.createHotel(createHotelDto);
         log.info("POST /hotels  создан отель с id {}", hotelShortDto.getId());
-        return ResponseEntity.status(201).body(hotelService.createHotel(createHotelDto));
+        return ResponseEntity.status(201).body(hotelShortDto);
     }
 
     @PostMapping("hotels/{id}/amenities")
@@ -65,6 +66,14 @@ public class HotelController {
         hotelService.addAmenities(id, amenities);
         log.info("POST /hotels  createHotelDto удобства успешно добавлены к отелю с id {}", id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("histogram/{param}")
+    public ResponseEntity<Map<String, Long>> getHistogram(@PathVariable String param) {
+        log.info("GET /histogram/{}  получение гистограммы по параметру: {}", param, param);
+        Map<String, Long> histogram = hotelService.getHistogram(param);
+        log.info("GET /histogram/{}  получена гистограмма: {}", param, histogram);
+        return ResponseEntity.ok(histogram);
     }
 
 }
