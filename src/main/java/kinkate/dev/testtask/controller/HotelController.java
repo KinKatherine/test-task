@@ -6,6 +6,7 @@ import kinkate.dev.testtask.service.HotelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,5 +29,16 @@ public class HotelController {
     @GetMapping("hotels/{id}")
     public ResponseEntity<HotelFullDto> getHotelById(@PathVariable Long id) {
         return ResponseEntity.ok(hotelService.getHotelById(id));
+    }
+
+    @GetMapping("hotels/search")
+    public ResponseEntity<List<HotelShortDto>> searchHotels(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String amenities
+            ) {
+        return ResponseEntity.ok(hotelService.searchHotels(name, brand, city, country, amenities));
     }
 }

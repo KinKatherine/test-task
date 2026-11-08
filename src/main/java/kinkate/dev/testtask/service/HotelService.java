@@ -63,4 +63,19 @@ public class HotelService {
                 .orElseThrow(() -> new EntityNotFoundException("Отель не найден"));
 
     }
+
+    public List<HotelShortDto> searchHotels(String name, String brand, String city, String country, String amenities) {
+        return hotelRepository.searchHotels(name, brand, city, country, amenities).stream()
+                .map(hotel -> new HotelShortDto(
+                        hotel.getId(),
+                        hotel.getName(),
+                        hotel.getDescription(),
+                        hotel.getAddress().getHouseNumber() + " " + hotel.getAddress().getStreet() + ", " +
+                                hotel.getAddress().getCity() + ", " +
+                                hotel.getAddress().getPostCode() + ", " +
+                                hotel.getAddress().getCountry(),
+                        hotel.getContact().getPhone()
+                ))
+                .toList();
+    }
 }
