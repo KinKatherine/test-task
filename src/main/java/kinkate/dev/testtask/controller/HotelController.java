@@ -53,6 +53,9 @@ public class HotelController {
 
     @PostMapping("hotels")
     public ResponseEntity<HotelShortDto> createHotel(@RequestBody @Valid CreateHotelDto createHotelDto) {
+        log.info("POST /hotels  createHotelDto");
+        HotelShortDto hotelShortDto = hotelService.createHotel(createHotelDto);
+        log.info("POST /hotels  создан отель с id {}", hotelShortDto.getId());
         return ResponseEntity.status(201).body(hotelService.createHotel(createHotelDto));
     }
 

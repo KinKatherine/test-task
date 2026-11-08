@@ -91,6 +91,7 @@ public class HotelService {
     }
 
     public HotelShortDto createHotel(CreateHotelDto dto) {
+        log.info("Запрос на создание отеля");
         Hotel hotel = new Hotel();
         hotel.setName(dto.getName());
         hotel.setDescription(dto.getDescription());
@@ -115,7 +116,7 @@ public class HotelService {
         hotel.setArrivalTime(arrivalTime);
 
         Hotel savedHotel = hotelRepository.save(hotel);
-
+        log.info("Отель с id {} успешно создан", savedHotel.getId());
         return new HotelShortDto(
                 savedHotel.getId(),
                 savedHotel.getName(),
