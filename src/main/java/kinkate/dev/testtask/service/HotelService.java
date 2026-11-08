@@ -134,11 +134,14 @@ public class HotelService {
 
     @Transactional
     public void addAmenities(Long id, List<String> amenities) {
+        log.info("Запрос на добавление удобств к отелю с id {}", id);
         Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Отель не найден"));
         if (hotel.getAmenities() == null) {
+            log.info("У отеля с id {} нет удобств, создаем новый список", id);
             hotel.setAmenities(new ArrayList<>());
         }
         hotel.getAmenities().addAll(amenities);
         hotelRepository.save(hotel);
+        log.info("Удобства успешно добавлены к отелю с id {}", id);
     }
 }
