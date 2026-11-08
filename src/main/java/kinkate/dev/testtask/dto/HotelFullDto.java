@@ -13,8 +13,8 @@ public class HotelFullDto {
     private String name;
     private String description;
     private String brand;
-    private AddressDto address;       // Вложенный DTO
-    private ContactDto contacts;      // Вложенный DTO
-    private ArrivalTimeDto arrivalTime; // Вложенный DTO
+    private AddressDto address;
+    private ContactDto contacts;
+    private ArrivalTimeDto arrivalTime;
     private List<String> amenities;
 }

@@ -1,11 +1,17 @@
 package kinkate.dev.testtask.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import kinkate.dev.testtask.dto.AddressDto;
 import kinkate.dev.testtask.dto.ArrivalTimeDto;
 import kinkate.dev.testtask.dto.ContactDto;
+import kinkate.dev.testtask.dto.CreateHotelDto;
 import kinkate.dev.testtask.dto.HotelFullDto;
 import kinkate.dev.testtask.dto.HotelShortDto;
+import kinkate.dev.testtask.entity.Address;
+import kinkate.dev.testtask.entity.ArrivalTime;
+import kinkate.dev.testtask.entity.Contact;
+import kinkate.dev.testtask.entity.Hotel;
 import kinkate.dev.testtask.repository.HotelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -82,5 +88,44 @@ public class HotelService {
                 .toList();
         log.info("Найдено {} отелей с фильтрацией", list.size());
         return list;
+    }
+
+    public HotelShortDto createHotel(CreateHotelDto dto) {
+        log.info("Запрос на создание отеля");
+        Hotel hotel = new Hotel();
+        hotel.setName(dto.getName());
+        hotel.setDescription(dto.getDescription());
+        hotel.setBrand(dto.getBrand());
+
+        Address address = new Address();
+        address.setHouseNumber(dto.getAddress().getHouseNumber());
+        address.setStreet(dto.getAddress().getStreet());
+        address.setCity(dto.getAddress().getCity());
+        address.setCountry(dto.getAddress().getCountry());
+        address.setPostCode(dto.getAddress().getPostCode());
+        hotel.setAddress(address);
+
+        Contact contact = new Contact();
+        contact.setPhone(dto.getContacts().getPhone());
+        contact.setEmail(dto.getContacts().getEmail());
+        hotel.setContact(contact);
+
+        ArrivalTime arrivalTime = new ArrivalTime();
+        arrivalTime.setCheckIn(dto.getArrivalTime().getCheckIn());
+        arrivalTime.setCheckOut(dto.getArrivalTime().getCheckOut());
+        hotel.setArrivalTime(arrivalTime);
+
+        Hotel savedHotel = hotelRepository.save(hotel);
+        log.info("Отель с id {} успешно создан", savedHotel.getId());
+        return new HotelShortDto(
+                savedHotel.getId(),
+                savedHotel.getName(),
+                savedHotel.getDescription(),
+                savedHotel.getAddress().getHouseNumber() + " " + savedHotel.getAddress().getStreet() + ", " +
+                        savedHotel.getAddress().getCity() + ", " +
+                        savedHotel.getAddress().getPostCode() + ", " +
+                        savedHotel.getAddress().getCountry(),
+                savedHotel.getContact().getPhone()
+        );
     }
 }
