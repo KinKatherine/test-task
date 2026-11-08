@@ -1,6 +1,7 @@
 package kinkate.dev.testtask.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import kinkate.dev.testtask.dto.AddressDto;
 import kinkate.dev.testtask.dto.ArrivalTimeDto;
@@ -16,6 +17,7 @@ import kinkate.dev.testtask.repository.HotelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -90,6 +92,7 @@ public class HotelService {
         return list;
     }
 
+    @Transactional
     public HotelShortDto createHotel(CreateHotelDto dto) {
         log.info("Запрос на создание отеля");
         Hotel hotel = new Hotel();
@@ -127,5 +130,15 @@ public class HotelService {
                         savedHotel.getAddress().getCountry(),
                 savedHotel.getContact().getPhone()
         );
+    }
+
+    @Transactional
+    public void addAmenities(Long id, List<String> amenities) {
+        Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Отель не найден"));
+        if (hotel.getAmenities() == null) {
+            hotel.setAmenities(new ArrayList<>());
+        }
+        hotel.getAmenities().addAll(amenities);
+        hotelRepository.save(hotel);
     }
 }
