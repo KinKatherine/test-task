@@ -53,10 +53,18 @@ public class HotelController {
 
     @PostMapping("hotels")
     public ResponseEntity<HotelShortDto> createHotel(@RequestBody @Valid CreateHotelDto createHotelDto) {
-        log.info("POST /hotels  createHotelDto");
+        log.info("POST /hotels");
         HotelShortDto hotelShortDto = hotelService.createHotel(createHotelDto);
         log.info("POST /hotels  создан отель с id {}", hotelShortDto.getId());
         return ResponseEntity.status(201).body(hotelService.createHotel(createHotelDto));
+    }
+
+    @PostMapping("hotels/{id}/amenities")
+    public ResponseEntity<Void> addAmenities(@PathVariable Long id, @RequestBody List<String> amenities) {
+        log.info("POST hotels/{id}/amenities добавление удобств к отелю с id {}: ", id);
+        hotelService.addAmenities(id, amenities);
+        log.info("POST /hotels  createHotelDto удобства успешно добавлены к отелю с id {}", id);
+        return ResponseEntity.ok().build();
     }
 
 }
