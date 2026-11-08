@@ -147,6 +147,7 @@ public class HotelService {
     }
 
     public Map<String, Long> getHistogram(String param) {
+        log.info("Запрос на получение гистограммы по параметру: {}", param);
         List<Object[]> results;
 
         switch (param.toLowerCase()) {
@@ -164,6 +165,7 @@ public class HotelService {
             }
         }
 
+        log.info("Гистограмма по параметру {} успешно получена: {}", param, histogram);
         return histogram;
     }
 }

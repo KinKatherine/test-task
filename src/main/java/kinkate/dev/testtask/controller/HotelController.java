@@ -70,7 +70,10 @@ public class HotelController {
 
     @GetMapping("histogram/{param}")
     public ResponseEntity<Map<String, Long>> getHistogram(@PathVariable String param) {
-        return ResponseEntity.ok(hotelService.getHistogram(param));
+        log.info("GET /histogram/{}  получение гистограммы по параметру: {}", param, param);
+        Map<String, Long> histogram = hotelService.getHistogram(param);
+        log.info("GET /histogram/{}  получена гистограмма: {}", param, histogram);
+        return ResponseEntity.ok(histogram);
     }
 
 }
