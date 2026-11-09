@@ -30,15 +30,21 @@ public class HotelController {
 
     @GetMapping("hotels")
     public ResponseEntity<List<HotelShortDto>> getAllHotels() {
-        return ResponseEntity.ok(hotelService.getAllHotels());
+        log.info("GET /hotels  получение всех отелей");
+        List<HotelShortDto> hotels = hotelService.getAllHotels();
+        log.info("GET /hotels  получено {} отелей", hotels.size());
+        return ResponseEntity.ok(hotels);
     }
 
     @GetMapping("hotels/{id}")
     public ResponseEntity<HotelFullDto> getHotelById(@PathVariable Long id) {
-        return ResponseEntity.ok(hotelService.getHotelById(id));
+        log.info("GET /hotels/{}  получение отеля с id {}", id, id);
+        HotelFullDto hotelFullDto = hotelService.getHotelById(id);
+        log.info("GET /hotels/{}  получен отель с id {}", id, id);
+        return ResponseEntity.ok(hotelFullDto);
     }
 
-    @GetMapping("hotels/search")
+    @GetMapping("search")
     public ResponseEntity<List<HotelShortDto>> searchHotels(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
@@ -46,9 +52,9 @@ public class HotelController {
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String amenities
             ) {
-        log.info("GET /hotels/search  name: {}, brand: {}, city: {}, country: {}, amenities: {}", name, brand, city, country, amenities);
+        log.info("GET /search  name: {}, brand: {}, city: {}, country: {}, amenities: {}", name, brand, city, country, amenities);
         List<HotelShortDto> hotelShortDtoList = hotelService.searchHotels(name, brand, city, country, amenities);
-        log.info("GET /hotels/search  получено {} отелей", hotelShortDtoList.size());
+        log.info("GET /search  получено {} отелей", hotelShortDtoList.size());
         return ResponseEntity.ok(hotelShortDtoList);
     }
 
