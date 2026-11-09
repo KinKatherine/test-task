@@ -1,6 +1,5 @@
 package kinkate.dev.testtask.dto;
 
-import kinkate.dev.testtask.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
